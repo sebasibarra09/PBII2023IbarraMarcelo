@@ -15,7 +15,7 @@ public class Tienda {
 	private Set<Producto> productos;
 	private Map<Producto, Integer> stock;
 	private Set<Cliente> clientes;
-	private Set<Vendedor> vendedores;
+	private Set <Vendedor> vendedores;
 	private Set <Venta> ventas;
 	private Set <Servicio> servicios;
 	
@@ -92,7 +92,7 @@ public class Tienda {
 						for (Venta venta : ventas) {
 							if (venta.getCodigo() == codigo2) {
 								venta.setTotal(venta.getTotal()+(producto.getPrecio()*cantidadVendida));
-								System.out.println(venta.getTotal());
+								
 							}
 						}
 						return;
@@ -117,5 +117,24 @@ public class Tienda {
 		}
 		
 	}
+
+	public void agregarVentaAlVendedor(Venta venta, Vendedor vendedor) {
+		for (Vendedor vende : vendedores) {
+			vendedor.getVentas().add(venta);
+		}
+	}
+
+	public void sumarVentasPorVendedor(Vendedor vendedor) {
+		for (Venta vende : vendedor.getVentas()) {
+			vendedor.setVentasGeneradas(vendedor.getGananciasGeneradas()+vende.getTotal());
+		}
+		
+	}
+
+	public void calcularPorcentajePorVendedor(Vendedor vendedor) {
+		vendedor.setGananciasGeneradas(vendedor.getGananciasGeneradas()+vendedor.getVentasGeneradas()*0.10);
+		System.out.println(vendedor.getGananciasGeneradas());
+	}
+	
 
 }

@@ -145,6 +145,63 @@ public class testTienda {
 		
 	}
 	
+	@Test
+	public void queSePuedaEstablecerElPorcentajeDeComisionDeUnVendedor() throws VentaInexistenteException, VendibleInexistenteException, StockInsuficienteException {
+		Tienda tienda = new Tienda("30123456780", "Tienda de ejemplo");
+		String cuitCliente = "30123456780";
+		Cliente cliente = new Cliente(cuitCliente, "Cliente de ejemplo");
+		tienda.agregarCliente(cliente);
+		String dniEjemplo = "12345678";
+		Vendedor vendedor = new Vendedor (dniEjemplo, "Vendedor de ejemplo");
+		tienda.agregarVendedor(vendedor);
+		Venta venta = new Venta("C-0001", cliente, vendedor);
+		tienda.agregarVentaAlVendedor(venta, vendedor);
+		tienda.agregarVenta(venta);
+		Vendible vendible;
+		vendible = new Servicio("1", "Servicio Técnico", 100d, "2023-02-01", "2023-03-01");
+		tienda.agregarServicio((Servicio) vendible);
+		tienda.agregarServicioAVenta(venta.getCodigo(), (Servicio) vendible);
+		vendible = new Producto("2", "Producto nuevo", 350d);
+		Integer stockInicial = 10;
+		tienda.agregarProducto((Producto) vendible, stockInicial);
+		Integer cantidadVendida = 2;
+		tienda.agregarProductoAVenta(venta.getCodigo(), (Producto) vendible, cantidadVendida);
+		Double totalEsperado = 800d;
+		Double totalActual = venta.getTotal();
+		tienda.agregarVentaAlVendedor(venta, vendedor);
+		tienda.sumarVentasPorVendedor(vendedor);
+		assertEquals(totalEsperado,vendedor.getVentasGeneradas(), 0.1 );
+		
+	}
 	
+	@Test
+	public void queSeCalculeElMontoTotalDeComisionesQueTieneUnVendedor() throws VentaInexistenteException, VendibleInexistenteException, StockInsuficienteException {
+		Tienda tienda = new Tienda("30123456780", "Tienda de ejemplo");
+		String cuitCliente = "30123456780";
+		Cliente cliente = new Cliente(cuitCliente, "Cliente de ejemplo");
+		tienda.agregarCliente(cliente);
+		String dniEjemplo = "12345678";
+		Vendedor vendedor = new Vendedor (dniEjemplo, "Vendedor de ejemplo");
+		tienda.agregarVendedor(vendedor);
+		Venta venta = new Venta("C-0001", cliente, vendedor);
+		tienda.agregarVentaAlVendedor(venta, vendedor);
+		tienda.agregarVenta(venta);
+		Vendible vendible;
+		vendible = new Servicio("1", "Servicio Técnico", 100d, "2023-02-01", "2023-03-01");
+		tienda.agregarServicio((Servicio) vendible);
+		tienda.agregarServicioAVenta(venta.getCodigo(), (Servicio) vendible);
+		vendible = new Producto("2", "Producto nuevo", 350d);
+		Integer stockInicial = 10;
+		tienda.agregarProducto((Producto) vendible, stockInicial);
+		Integer cantidadVendida = 2;
+		tienda.agregarProductoAVenta(venta.getCodigo(), (Producto) vendible, cantidadVendida);
+		Double totalEsperado = 80d;
+		Double totalActual = venta.getTotal();
+		tienda.agregarVentaAlVendedor(venta, vendedor);
+		tienda.sumarVentasPorVendedor(vendedor);
+		tienda.calcularPorcentajePorVendedor(vendedor);
+		assertEquals(totalEsperado, vendedor.getGananciasGeneradas(), 0.1);
+		
+	}
 
 }
